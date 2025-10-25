@@ -1,7 +1,9 @@
 import config from '../../config/config.ts';
 import authRoute from './auth.route.ts';
 import docsRoute from './docs.route.ts';
+import itemRoute from './item.route.ts';
 import mcpRoute from './mcp.route.ts';
+import stockUpdateRoute from './stock-update.route.ts';
 import userRoute from './user.route.ts';
 import express from 'express';
 
@@ -15,6 +17,14 @@ const defaultRoutes = [
     {
         path: '/users',
         route: userRoute
+    },
+    {
+        path: '/items',
+        route: itemRoute
+    },
+    {
+        path: '/stock-updates',
+        route: stockUpdateRoute
     },
     {
         path: '/mcp',

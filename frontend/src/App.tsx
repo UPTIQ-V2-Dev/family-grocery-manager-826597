@@ -1,6 +1,8 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ItemsPage } from './pages/ItemsPage';
+import { LoginPage } from './pages/LoginPage';
+import { isAuthenticated } from './lib/api';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -11,6 +13,26 @@ const queryClient = new QueryClient({
     }
 });
 
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+    const location = useLocation();
+
+    if (!isAuthenticated()) {
+        return (
+            <Navigate
+                to='/login'
+                state={{ from: location }}
+                replace
+            />
+        );
+    }
+
+    return <>{children}</>;
+};
+
 export const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
@@ -18,25 +40,37 @@ export const App = () => {
                 <div className='min-h-screen bg-gray-50'>
                     <Routes>
                         <Route
+                            path='/login'
+                            element={<LoginPage />}
+                        />
+                        <Route
                             path='/'
                             element={
-                                <Navigate
-                                    to='/items'
-                                    replace
-                                />
+                                <ProtectedRoute>
+                                    <Navigate
+                                        to='/items'
+                                        replace
+                                    />
+                                </ProtectedRoute>
                             }
                         />
                         <Route
                             path='/items'
-                            element={<ItemsPage />}
+                            element={
+                                <ProtectedRoute>
+                                    <ItemsPage />
+                                </ProtectedRoute>
+                            }
                         />
                         <Route
                             path='*'
                             element={
-                                <Navigate
-                                    to='/items'
-                                    replace
-                                />
+                                <ProtectedRoute>
+                                    <Navigate
+                                        to='/items'
+                                        replace
+                                    />
+                                </ProtectedRoute>
                             }
                         />
                     </Routes>
