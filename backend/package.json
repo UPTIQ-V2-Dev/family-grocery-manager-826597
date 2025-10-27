@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "dev": "pnpm db:migrate && pnpm db:seed && cross-env NODE_ENV=development tsx watch ./src/index.ts",
+        "dev": "pnpm db:push && pnpm db:seed && cross-env NODE_ENV=development tsx watch ./src/index.ts",
         "db:seed": "cross-env NODE_ENV=development prisma db seed",
         "db:migrate": "cross-env NODE_ENV=development prisma migrate dev --name auto-migration",
         "db:push": "cross-env NODE_ENV=development prisma db push --accept-data-loss --force-reset",

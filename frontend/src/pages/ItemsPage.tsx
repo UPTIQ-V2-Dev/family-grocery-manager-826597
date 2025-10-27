@@ -17,13 +17,16 @@ export const ItemsPage = () => {
 
     // Fetch items
     const {
-        data: items = [],
+        data: itemsData = [],
         isLoading,
         error
     } = useQuery({
         queryKey: ['items', filters],
         queryFn: () => itemsService.getAllItems(filters)
     });
+
+    // Ensure items is always an array
+    const items = Array.isArray(itemsData) ? itemsData : [];
 
     // Add item mutation
     const addItemMutation = useMutation({

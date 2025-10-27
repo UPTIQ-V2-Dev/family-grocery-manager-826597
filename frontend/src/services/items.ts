@@ -28,7 +28,9 @@ export const itemsService = {
         }
 
         const response = await api.get('/items', { params: filters });
-        return response.data;
+        // Ensure we return an array - handle different response structures
+        const data = response.data;
+        return Array.isArray(data) ? data : data?.items || data?.data || [];
     },
 
     getItemById: async (id: string): Promise<GroceryItem> => {
@@ -41,7 +43,9 @@ export const itemsService = {
         }
 
         const response = await api.get(`/items/${id}`);
-        return response.data;
+        // Handle different response structures
+        const data = response.data;
+        return data?.item || data?.data || data;
     },
 
     createItem: async (itemData: CreateItemInput): Promise<GroceryItem> => {
@@ -59,7 +63,9 @@ export const itemsService = {
         }
 
         const response = await api.post('/items', itemData);
-        return response.data;
+        // Handle different response structures
+        const data = response.data;
+        return data?.item || data?.data || data;
     },
 
     updateItem: async (itemData: UpdateItemInput): Promise<GroceryItem> => {
@@ -86,7 +92,9 @@ export const itemsService = {
         }
 
         const response = await api.put(`/items/${itemData.id}`, itemData);
-        return response.data;
+        // Handle different response structures
+        const data = response.data;
+        return data?.item || data?.data || data;
     },
 
     deleteItem: async (id: string): Promise<void> => {
